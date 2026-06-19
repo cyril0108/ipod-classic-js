@@ -1,18 +1,15 @@
+import { Suspense } from "react";
 import { Ipod } from "@/components/Ipod";
 import { APPLE_DEVELOPER_TOKEN } from "@/utils/constants/api";
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | undefined>>;
-}) {
+export const revalidate = 3600;
+
+export default function Page() {
   const appleAccessToken = APPLE_DEVELOPER_TOKEN ?? "";
-  const { code: spotifyCallbackCode } = await searchParams;
 
   return (
-    <Ipod
-      appleAccessToken={appleAccessToken}
-      spotifyCallbackCode={spotifyCallbackCode}
-    />
+    <Suspense>
+      <Ipod appleAccessToken={appleAccessToken} />
+    </Suspense>
   );
 }

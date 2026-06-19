@@ -19,7 +19,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SpotifySDKProvider } from "@/providers/SpotifySdkProvider";
 import { MusicKitProvider } from "@/providers/MusicKitProvider";
 import ViewContextProvider from "@/providers/ViewContextProvider";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { GlobalStyles } from "@/components/Ipod/GlobalStyles";
 import Script from "next/script";
 import { API_URL } from "@/utils/constants/api";
@@ -27,11 +27,11 @@ import { SELECTED_SERVICE_KEY } from "@/utils/service";
 
 type Props = {
   appleAccessToken: string;
-  spotifyCallbackCode?: string;
 };
 
-const Ipod = ({ appleAccessToken, spotifyCallbackCode }: Props) => {
+const Ipod = ({ appleAccessToken }: Props) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [queryClient] = useState(() => new QueryClient());
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,6 +46,7 @@ const Ipod = ({ appleAccessToken, spotifyCallbackCode }: Props) => {
   );
 
   useEffectOnce(() => {
+    const spotifyCallbackCode = searchParams.get("code");
     if (spotifyCallbackCode) {
       handleSpotifyCallback(spotifyCallbackCode);
       return;
